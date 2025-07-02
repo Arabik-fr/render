@@ -12,22 +12,29 @@ const HF_TOKEN = process.env.HF_TOKEN;
 const HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.1";
 
 app.post('/chat', async (req, res) => {
+  const prompt = req.body.prompt;
+
   try {
-    const prompt = req.body.prompt;
     const response = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${HF_TOKEN}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ inputs: prompt })
+      body: JSON.stringify({ inputs: prompt }),
     });
 
-    const data = await response.json();
-    const output = data?.[0]?.generated_text || data?.generated_text || JSON.stringify(data);
+    const result = await response.json();
+
+    const output =
+      result?.[0]?.generated_text ||
+      result?.generated_text ||
+      result?.output ||
+      JSON.stringify(result);
+
     res.json({ response: output });
   } catch (error) {
-    console.error(error);
+    console.error("Erreur HuggingFace :", error.message);
     res.status(500).json({ error: 'Erreur serveur HuggingFace.' });
   }
 });

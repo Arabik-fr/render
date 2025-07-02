@@ -26,15 +26,19 @@ app.post('/chat', async (req, res) => {
 
     const result = await response.json();
 
+    // Débogage (affiche la réponse brute dans les logs Render)
+    console.log("Réponse HuggingFace:", result);
+
+    // Certaines réponses arrivent sous forme de tableau
     const output =
-      result?.[0]?.generated_text ||
-      result?.generated_text ||
-      result?.output ||
-      JSON.stringify(result);
+      Array.isArray(result) && result[0]?.generated_text
+        ? result[0].generated_text
+        : result?.generated_text || result?.output || "Réponse IA introuvable.";
 
     res.json({ response: output });
+
   } catch (error) {
-    console.error("Erreur HuggingFace :", error.message);
+    console.error("Erreur HuggingFace:", error.message);
     res.status(500).json({ error: 'Erreur serveur HuggingFace.' });
   }
 });

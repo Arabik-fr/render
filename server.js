@@ -9,7 +9,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const HF_TOKEN = process.env.HF_TOKEN;
-const HF_MODEL = "tiiuae/falcon-7b-instruct";
+const HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.1";
 
 app.post('/chat', async (req, res) => {
   const prompt = req.body.prompt;

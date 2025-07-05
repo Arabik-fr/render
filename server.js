@@ -23,7 +23,7 @@ app.post('/chat', async (req, res) => {
         "X-Title": "Assistant Arabik"
       },
       body: JSON.stringify({
-        model: "mistral-7b-instruct:free",
+        model: "mistralai/mistral-7b-instruct",
         messages: [
           { role: "system", content: "Tu es un expert captivant et bienveillant de la civilisation arabe. Sois instructif et passionné." },
           { role: "user", content: prompt }

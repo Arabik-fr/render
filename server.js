@@ -15,7 +15,7 @@ app.post('/chat', async (req, res) => {
   const prompt = req.body.prompt;
 
   try {
-    const response = await fetch(`https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct`, {
+    const response = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${HF_TOKEN}`,
@@ -26,15 +26,24 @@ app.post('/chat', async (req, res) => {
 
     const result = await response.json();
 
-    // On renvoie toute la réponse JSON brute pour analyse
-    res.json({ debug: result });
+    // Extraction du texte généré
+    let output = "";
+
+    if (Array.isArray(result) && result[0]?.generated_text) {
+      output = result[0].generated_text;
+    } else if (result.generated_text) {
+      output = result.generated_text;
+    } else {
+      output = JSON.stringify(result); // fallback brut si structure inattendue
+    }
+
+    res.json({ response: output });
 
   } catch (error) {
     console.error("Erreur HuggingFace:", error.message);
     res.status(500).json({ error: 'Erreur serveur HuggingFace.' });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Serveur en ligne sur le port ${PORT}`);

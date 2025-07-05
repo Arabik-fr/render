@@ -15,6 +15,7 @@ app.post('/chat', async (req, res) => {
   const prompt = req.body.prompt;
 
   try {
+    console.log("Token utilisé :", HF_TOKEN);
     const response = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`, {
       method: 'POST',
       headers: {

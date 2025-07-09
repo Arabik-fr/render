@@ -11,7 +11,13 @@ const PORT = process.env.PORT || 3000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 app.post('/chat', async (req, res) => {
+  console.log("Corps de la requête :", req.body); // <= AJOUTE CETTE LIGNE
+
   const prompt = req.body.prompt;
+  console.log("Prompt reçu :", prompt); // déjà présent ? sinon ajoute-le aussi
+
+  // ...
+});
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {

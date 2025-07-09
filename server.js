@@ -32,7 +32,7 @@ app.post('/chat', async (req, res) => {
     });
 
     const result = await response.json();
-    console.log("Réponse OpenRouter complète :", result);
+    console.log("Réponse OpenRouter complète :", JSON.stringify(result, null, 2));
 
     const output = result.choices?.[0]?.message?.content || "❌ Aucune réponse générée.";
     res.json({ response: output });

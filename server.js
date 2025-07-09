@@ -11,13 +11,8 @@ const PORT = process.env.PORT || 3000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 app.post('/chat', async (req, res) => {
-  console.log("Corps de la requête :", req.body); // <= AJOUTE CETTE LIGNE
-
   const prompt = req.body.prompt;
-  console.log("Prompt reçu :", prompt); // déjà présent ? sinon ajoute-le aussi
-
-  // ...
-});
+  console.log("Prompt reçu :", prompt);
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -27,15 +22,17 @@ app.post('/chat', async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "Tu es un assistant expert et passionné de la civilisation arabe. Tu réponds avec clarté et détails." },
+          { role: "system", content: "Tu es un assistant expert, passionné et bienveillant sur la civilisation arabe. Réponds de manière captivante et instructive." },
           { role: "user", content: prompt }
         ]
-      })
+      }),
     });
 
     const result = await response.json();
+    console.log("Réponse OpenAI :", result);
+
     const output = result.choices?.[0]?.message?.content || "❌ Aucune réponse générée.";
     res.json({ response: output });
 
@@ -46,5 +43,5 @@ app.post('/chat', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Serveur en ligne sur le port ${PORT}`);
+  console.log(`✅ Serveur en ligne sur le port ${PORT}`);
 });

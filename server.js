@@ -23,7 +23,7 @@ app.post('/chat', async (req, res) => {
         "X-Title": "Assistant Arabik"
       },
       body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo"
+        model: "openai/gpt-3.5-turbo",
         messages: [
           { role: "system", content: "Tu es un expert captivant et bienveillant de la civilisation arabe. Sois instructif et passionné." },
           { role: "user", content: prompt }

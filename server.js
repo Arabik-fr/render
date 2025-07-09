@@ -8,41 +8,37 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-const API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 app.post('/chat', async (req, res) => {
   const prompt = req.body.prompt;
 
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${API_KEY}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://arabik-fr.github.io", // pour attribution API
-        "X-Title": "Assistant Arabik"
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistralai/mistral-7b-instruct",
+        model: "gpt-4",
         messages: [
-          { role: "system", content: "Tu es un expert captivant et bienveillant de la civilisation arabe. Sois instructif et passionné." },
+          { role: "system", content: "Tu es un assistant expert et passionné de la civilisation arabe. Tu réponds avec clarté et détails." },
           { role: "user", content: prompt }
         ]
-      }),
+      })
     });
 
     const result = await response.json();
-    console.log("Réponse OpenRouter complète :", JSON.stringify(result, null, 2));
-
     const output = result.choices?.[0]?.message?.content || "❌ Aucune réponse générée.";
     res.json({ response: output });
 
   } catch (error) {
-    console.error("Erreur OpenRouter:", error.message);
-    res.status(500).json({ error: "Erreur de connexion à OpenRouter." });
+    console.error("Erreur OpenAI:", error.message);
+    res.status(500).json({ error: "Erreur de connexion à OpenAI." });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Serveur OpenRouter en ligne sur le port ${PORT}`);
+  console.log(`Serveur en ligne sur le port ${PORT}`);
 });
